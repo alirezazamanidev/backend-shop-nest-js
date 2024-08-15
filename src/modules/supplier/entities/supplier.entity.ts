@@ -3,6 +3,7 @@ import { EntityName } from "src/common/enums/entityName.enum";
 import { CategoryEntity } from "src/modules/category/entities/category.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, UpdateDateColumn } from "typeorm";
 import { SupplierOtpEntity } from "./otp.entity";
+import { SupplierStatus } from "../enum/status.enum";
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity extends BaseEntity {
@@ -11,6 +12,8 @@ export class SupplierEntity extends BaseEntity {
   phone:string
   @Column()
   manager_fullname:string
+  @Column({default:SupplierStatus.Registered})
+  status:string
   @Column()
   store_name:string
   @Column({unique:true,nullable:true})

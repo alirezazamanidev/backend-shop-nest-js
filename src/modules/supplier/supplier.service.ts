@@ -1,10 +1,12 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
   NotFoundException,
+  Scope,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SupplierSignupDto } from './dto/supplier.dto';
+import { SupplementaryInformationDto, SupplierSignupDto } from './dto/supplier.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SupplierEntity } from './entities/supplier.entity';
 import { Repository } from 'typeorm';
@@ -20,8 +22,11 @@ import { randomInt } from 'crypto';
 import { CheckOtpDto, SendOtpDto } from '../auth/dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { TokenService } from './token.service';
+import { REQUEST } from '@nestjs/core';
+import { Request } from 'express';
+import { SupplierStatus } from './enum/status.enum';
 
-@Injectable()
+@Injectable({scope:Scope.REQUEST})
 export class SupplierService {
   constructor(
     @InjectRepository(SupplierEntity)
@@ -30,6 +35,7 @@ export class SupplierService {
     private readonly supplierOtpRepository: Repository<SupplierOtpEntity>,
     private readonly categoryService: CategoryService,
     private tokenService: TokenService,
+    @Inject(REQUEST) private request:Request
   ) {}
 
   async sginup(signupDto: SupplierSignupDto) {
@@ -90,6 +96,37 @@ export class SupplierService {
       message: PublicMessage.LoggedIn,
       token,
     };
+  }
+
+  async saveSupplementaryInformation (infoDto:SupplementaryInformationDto){
+    let {id:supplierId}=this.request.supplier;
+    let {email,national_code}=infoDto
+    let supplier=await this.supplierRepository.findOneBy({email});
+    if(supplier && supplier.id !==supplierId) throw new ConflictException(ConflictMessage.Email);
+    supplier=await this.supplierRepository.findOneBy({national_code});
+    if(supplier && supplier.id!==supplierId) throw new ConflictException(ConflictMessage.National_code);
+
+    await this.supplierRepository.update(
+      {id:supplierId},
+      {
+        email,
+        national_code,
+        status: SupplierStatus.SupplementaryInformation,
+      }
+    );
+
+    return {
+      message:PublicMessage.Updated
+    }
+  }
+
+  async validateAccessToken(token:string){
+    const {supplierId}=this.tokenService.verifyJWT(token);
+
+    const supplier=await this.supplierRepository.findOne({where:{id:supplierId}})
+    if(!supplier) throw new UnauthorizedException(AuthMessage.LoginAgain);
+    return supplier
+
   }
 
   async createOtpForSupplier(supplierId: number) {
