@@ -8,6 +8,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { S3Module } from './modules/s3/s3.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
 import { ProductModule } from './modules/product/product.module';
+import { DiscountModule } from './modules/discount/discount.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ProductModule } from './modules/product/product.module';
     S3Module,
     SupplierModule,
     ProductModule,
+    DiscountModule,
 
   ],
   providers:[TypeOrmDbConfig]
