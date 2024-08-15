@@ -38,7 +38,7 @@ export class AuthService {
       where: { phone },
       relations: { otp: true },
     });
-    
+
 
     if (!user) throw new UnauthorizedException(AuthMessage.LoginAgain);
     let otp = user?.otp;
@@ -75,4 +75,12 @@ export class AuthService {
       await this.userRepository.update({ id: userId }, { otpId: otp.id });
     return otp;
   }
+  async validateUserData(userId:number){
+    const user=await this.userRepository.findOne({
+      where:{id:userId}
+    })
+    if(!user) throw new UnauthorizedException(AuthMessage.LoginAgain);
+    return user;
+  }
+
 }
