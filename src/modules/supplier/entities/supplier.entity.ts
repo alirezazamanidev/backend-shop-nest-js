@@ -1,9 +1,10 @@
 import { BaseEntity } from "src/common/entities/base.entity";
 import { EntityName } from "src/common/enums/entityName.enum";
 import { CategoryEntity } from "src/modules/category/entities/category.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, UpdateDateColumn } from "typeorm";
 import { SupplierOtpEntity } from "./otp.entity";
 import { SupplierStatus } from "../enum/status.enum";
+import { ProductEntity } from "src/modules/product/entities/product.entity";
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity extends BaseEntity {
@@ -39,4 +40,6 @@ export class SupplierEntity extends BaseEntity {
   created_at:Date
   @UpdateDateColumn()
   updated_at:Date
+  @OneToMany(()=>ProductEntity,product=>product.supplier)
+  products:ProductEntity[]
 }

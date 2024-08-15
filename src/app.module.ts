@@ -7,6 +7,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { S3Module } from './modules/s3/s3.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
+import { ProductModule } from './modules/product/product.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { SupplierModule } from './modules/supplier/supplier.module';
     AdminModule,
     S3Module,
     SupplierModule,
+    ProductModule,
 
   ],
   providers:[TypeOrmDbConfig]

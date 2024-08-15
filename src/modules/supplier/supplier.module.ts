@@ -12,5 +12,6 @@ import { TokenService } from './token.service';
   imports:[TypeOrmModule.forFeature([SupplierEntity,SupplierOtpEntity,CategoryEntity])],
   controllers: [SupplierController],
   providers: [SupplierService,CategoryService,TokenService],
+  exports: [SupplierService,CategoryService,TokenService],
 })
 export class SupplierModule {}
