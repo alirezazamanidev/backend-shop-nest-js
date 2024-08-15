@@ -13,5 +13,5 @@ export class OtpEntity extends BaseEntity {
   @OneToOne(()=>UserEntity,user=>user.otp,{onDelete:'CASCADE'})
   user:UserEntity
   @CreateDateColumn()
-  created_dAt:Date
+  created_At:Date
 }

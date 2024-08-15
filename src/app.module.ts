@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CategoryModule } from './modules/category/category.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { S3Module } from './modules/s3/s3.module';
+import { SupplierModule } from './modules/supplier/supplier.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { S3Module } from './modules/s3/s3.module';
     CategoryModule,
     AdminModule,
     S3Module,
+    SupplierModule,
 
   ],
   providers:[TypeOrmDbConfig]
