@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   UpdateDateColumn,
 } from 'typeorm';
@@ -26,5 +27,6 @@ export class UserEntity extends BaseEntity {
   @Column({ nullable: true })
   otpId: number;
   @OneToOne(() => OtpEntity, (otp) => otp.user, { onDelete: 'CASCADE' })
+  @JoinColumn({name:'otpId'})
   otp: OtpEntity;
 }
