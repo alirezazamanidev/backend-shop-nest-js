@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { SupplierSignupDto } from './dto/supplier.dto';
@@ -11,11 +12,12 @@ import { SupplierOtpEntity } from './entities/otp.entity';
 import {
   AuthMessage,
   ConflictMessage,
+  NotFoundMessage,
   PublicMessage,
 } from 'src/common/enums/message.enum';
 import { CategoryService } from '../category/category.service';
 import { randomInt } from 'crypto';
-import { CheckOtpDto } from '../auth/dto/auth.dto';
+import { CheckOtpDto, SendOtpDto } from '../auth/dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { TokenService } from './token.service';
 
@@ -48,6 +50,17 @@ export class SupplierService {
       message: PublicMessage.SendOtp,
       code: otp.code,
     };
+  }
+  async sendOtp(SendOtpDto:SendOtpDto){
+    let {phone}=SendOtpDto
+    let supplier=await this.supplierRepository.findOne({where:{phone}});
+    if(!supplier) throw new UnauthorizedException(NotFoundMessage.Supplier);
+
+    const otp=await this.createOtpForSupplier(supplier.id);
+    return {
+      message:PublicMessage.SendOtp,
+      code:otp.code
+    }
   }
 
   async checkOtp(CheckOtpDto: CheckOtpDto) {

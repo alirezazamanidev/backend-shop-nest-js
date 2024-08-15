@@ -3,13 +3,19 @@ import { SupplierService } from './supplier.service';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ContentType, SwaggerTags } from 'src/common/enums/swagger.enum';
 import { SupplierSignupDto } from './dto/supplier.dto';
-import { CheckOtpDto } from '../auth/dto/auth.dto';
+import { CheckOtpDto, SendOtpDto } from '../auth/dto/auth.dto';
 
 @ApiTags(SwaggerTags.Supplier)
 @Controller('supplier')
 export class SupplierController {
   constructor(private readonly supplierService: SupplierService) {}
 
+  @HttpCode(HttpStatus.OK)
+  @Post('send-otp')
+  sendOtp(@Body() SendOtpDto:SendOtpDto){
+    return this.supplierService.sendOtp(SendOtpDto)
+
+  }
   @HttpCode(HttpStatus.OK)
   @Post('signup')
   @ApiConsumes(ContentType.UrlEncoded,ContentType.Json)

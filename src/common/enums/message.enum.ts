@@ -12,6 +12,7 @@ export enum PublicMessage {
 export enum NotFoundMessage {
   Category = 'دسته ای یافت نشد!',
   User = 'کاربری یافت نشد!',
+  Supplier='اکانت فروشنده شما یافت نشد!'
 }
 export enum AuthMessage {
   OtpCodeNotExpired = 'کد تایید هنوز منقضی نشده است!',
