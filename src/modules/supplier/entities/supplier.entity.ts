@@ -1,7 +1,7 @@
 import { BaseEntity } from "src/common/entities/base.entity";
 import { EntityName } from "src/common/enums/entityName.enum";
 import { CategoryEntity } from "src/modules/category/entities/category.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToOne, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, UpdateDateColumn } from "typeorm";
 import { SupplierOtpEntity } from "./otp.entity";
 
 @Entity(EntityName.Supplier)
@@ -26,7 +26,12 @@ export class SupplierEntity extends BaseEntity {
   @Column({nullable:true})
   otpId:number
   @OneToOne(()=>SupplierOtpEntity,supplierOtp=>supplierOtp.supplier,{onDelete:'CASCADE'})
+  @JoinColumn({name:"otpId"})
   otp:SupplierOtpEntity
+  @Column({default:false})
+  phone_verify:boolean
+  @Column({unique:true,nullable:true})
+  national_code:string
   @CreateDateColumn()
   created_at:Date
   @UpdateDateColumn()

@@ -15,6 +15,9 @@ import {
 } from 'src/common/enums/message.enum';
 import { CategoryService } from '../category/category.service';
 import { randomInt } from 'crypto';
+import { CheckOtpDto } from '../auth/dto/auth.dto';
+import { JwtService } from '@nestjs/jwt';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class SupplierService {
@@ -24,6 +27,7 @@ export class SupplierService {
     @InjectRepository(SupplierOtpEntity)
     private readonly supplierOtpRepository: Repository<SupplierOtpEntity>,
     private readonly categoryService: CategoryService,
+    private tokenService: TokenService,
   ) {}
 
   async sginup(signupDto: SupplierSignupDto) {
@@ -43,6 +47,35 @@ export class SupplierService {
     return {
       message: PublicMessage.SendOtp,
       code: otp.code,
+    };
+  }
+
+  async checkOtp(CheckOtpDto: CheckOtpDto) {
+    let { phone, code } = CheckOtpDto;
+    const supplier = await this.supplierRepository.findOne({
+      where: { phone },
+      relations: { otp: true },
+    });
+
+    if (!supplier) throw new UnauthorizedException(AuthMessage.LoginAgain);
+    let otp = supplier?.otp;
+    if (!otp) throw new UnauthorizedException(AuthMessage.OtpInCurrent);
+    if (otp.code !== code)
+      throw new UnauthorizedException(AuthMessage.OtpInCurrent);
+    if (otp.expiresIn < new Date())
+      throw new UnauthorizedException(AuthMessage.ExpiredOtp);
+    if (!supplier.phone_verify)
+      await this.supplierRepository.update(
+        { id: supplier.id },
+        { phone_verify: true },
+      );
+    const token = await this.tokenService.createJwtToken({
+      supplierId: supplier.id,
+    });
+
+    return {
+      message: PublicMessage.LoggedIn,
+      token,
     };
   }
 

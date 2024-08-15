@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsMobilePhone, Length } from "class-validator";
+import { CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 export class SupplierSignupDto {
   @ApiProperty()
@@ -15,4 +16,7 @@ export class SupplierSignupDto {
   @ApiProperty()
   @IsMobilePhone("fa-IR", {}, {message: "mobile number is invalid"})
   phone: string;
+
+  
+
 }

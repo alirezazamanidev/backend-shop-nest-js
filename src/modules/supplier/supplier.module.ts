@@ -6,10 +6,11 @@ import { SupplierEntity } from './entities/supplier.entity';
 import { SupplierOtpEntity } from './entities/otp.entity';
 import { CategoryService } from '../category/category.service';
 import { CategoryEntity } from '../category/entities/category.entity';
+import { TokenService } from './token.service';
 
 @Module({
   imports:[TypeOrmModule.forFeature([SupplierEntity,SupplierOtpEntity,CategoryEntity])],
   controllers: [SupplierController],
-  providers: [SupplierService,CategoryService],
+  providers: [SupplierService,CategoryService,TokenService],
 })
 export class SupplierModule {}
