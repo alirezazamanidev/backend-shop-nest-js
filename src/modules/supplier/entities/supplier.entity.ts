@@ -13,7 +13,7 @@ export class SupplierEntity extends BaseEntity {
   manager_fullname:string
   @Column()
   store_name:string
-  @Column({unique:true})
+  @Column({unique:true,nullable:true})
   email:string
  @Column({nullable: true})
   categoryId: number;

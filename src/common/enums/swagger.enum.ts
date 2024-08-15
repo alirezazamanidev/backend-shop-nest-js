@@ -1,5 +1,6 @@
 export enum SwaggerTags {
   Auth='Auth',
+  Supplier='Supplier',
   AcminCategory='Category(AdminPanel)'
 }
 

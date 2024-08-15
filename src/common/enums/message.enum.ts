@@ -1,6 +1,6 @@
 export enum ConflictMessage {
   Slug = 'چنین موردی قیلا با این اسلاگ ثبت شده است!',
-  Supplier='اکانت فروشنده شما به عنوان فروشنده قبلا ثبت شده است!'
+  Supplier='اکانت فروشنده شما  قبلا ثبت شده است!'
 }
 
 export enum PublicMessage {
