@@ -1,4 +1,4 @@
-import { Inject, Injectable, Scope } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,7 +6,7 @@ import { ProductEntity } from './entities/product.entity';
 import { DeepPartial, Repository } from 'typeorm';
 import slugify from 'slugify';
 import { S3Service } from '../s3/s3.service';
-import { PublicMessage } from 'src/common/enums/message.enum';
+import { NotFoundMessage, PublicMessage } from 'src/common/enums/message.enum';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { CategoryService } from '../category/category.service';
@@ -58,7 +58,7 @@ export class ProductService {
     }
     const [products,count]=await this.productRepository.createQueryBuilder(EntityName.Product)
     .leftJoinAndSelect('product.category','category')
-    
+
     .where(where,parameters)
     .getManyAndCount()
 
@@ -68,4 +68,9 @@ export class ProductService {
     }
   }
 
+  async getOneById(id:number){
+    const product=await this.productRepository.findOneBy({id});
+    if(!product) throw new NotFoundException(NotFoundMessage.Product)
+    return product;
+  }
 }

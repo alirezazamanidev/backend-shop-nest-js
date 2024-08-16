@@ -10,5 +10,6 @@ import { SupplierModule } from '../supplier/supplier.module';
   imports:[S3Module,SupplierModule,TypeOrmModule.forFeature([ProductEntity])],
   controllers: [ProductController],
   providers: [ProductService],
+  exports:[ProductService]
 })
 export class ProductModule {}

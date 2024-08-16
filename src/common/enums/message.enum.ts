@@ -10,11 +10,13 @@ export enum PublicMessage {
   Insert = 'با موفقیت ایجاد شد!',
   Updated = 'با موفقیت ویرایش شد!',
   SendOtp = 'کد تایید با موفقیت ارسال شد!',
+  AddToBasket='با موفقیت به سبد خرید افزوده شده'
 }
 export enum NotFoundMessage {
   Category = 'دسته ای یافت نشد!',
   User = 'کاربری یافت نشد!',
-  Supplier='اکانت فروشنده شما یافت نشد!'
+  Supplier='اکانت فروشنده شما یافت نشد!',
+  Product='کالایی یافت نشد!'
 }
 export enum AuthMessage {
   OtpCodeNotExpired = 'کد تایید هنوز منقضی نشده است!',
