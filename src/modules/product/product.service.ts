@@ -10,6 +10,10 @@ import { PublicMessage } from 'src/common/enums/message.enum';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { CategoryService } from '../category/category.service';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { FilterProductDTo } from './dto/filter-product.dto';
+import { paginationGenerator, paginationSolver } from 'src/common/utility/pagination.util';
+import { EntityName } from 'src/common/enums/entityName.enum';
 
 @Injectable({scope:Scope.REQUEST})
 export class ProductService {
@@ -40,6 +44,28 @@ export class ProductService {
       message:PublicMessage.Insert
     }
 
+  }
+  async filterProducts(paginationDto:PaginationDto,FilterProductDTo:FilterProductDTo){
+    let {page,limit,skip}=paginationSolver(paginationDto);
+    let {search}=FilterProductDTo
+    let where='';
+    let parameters:any={}
+    if(search){
+      if(where.length>0) where+=' AND ';
+      search=`%${search}%`;
+      where+='CONCAT(product.title,product.description) LIKE :search';
+      parameters.search=search
+    }
+    const [products,count]=await this.productRepository.createQueryBuilder(EntityName.Product)
+    .leftJoinAndSelect('product.category','category')
+    
+    .where(where,parameters)
+    .getManyAndCount()
+
+    return {
+      products,
+      pagination:paginationGenerator(count,page,limit),
+    }
   }
 
 }
