@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Delete, HttpCode, HttpStatus, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { BasketService } from './basket.service';
 import { Auth } from 'src/common/decorators/auth.decorator';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
@@ -18,5 +18,11 @@ export class BasketController {
   addToBasket(@Body() basketDto:AddToBasketDTo){
     return this.basketService.addToBasket(basketDto)
 
+  }
+  @HttpCode(HttpStatus.OK)
+  @Delete('remove/:productId')
+  @ApiConsumes(ContentType.UrlEncoded,ContentType.Json)
+  removeFromBasket(@Param('productId',ParseIntPipe) productId:number){
+    return this.basketService.removeFromBasket(productId)
   }
 }
