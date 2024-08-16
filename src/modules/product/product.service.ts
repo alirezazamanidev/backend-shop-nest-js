@@ -27,9 +27,10 @@ export class ProductService {
   ) {
 
     let {id:supplierId}=this.request.supplier;
-    let {title,slug,categoryId,description,price}=createProductDto
+    let {title,discount,slug,categoryId,description,price}=createProductDto
 
-    let objectProduct:DeepPartial<ProductEntity>={title,description,supplierId,price};
+    let objectProduct:DeepPartial<ProductEntity>={title,discount,description,supplierId,price};
+    objectProduct['is_Active_discount']=discount ?true:false
     objectProduct['slug']=slug ?slug:slugify(title,{replacement:'_',lower:true});
     await this.categoryService.findOneById(categoryId);
     objectProduct['categoryId']=categoryId;
@@ -60,6 +61,8 @@ export class ProductService {
     .leftJoinAndSelect('product.category','category')
 
     .where(where,parameters)
+    .take(page)
+    .skip(skip)
     .getManyAndCount()
 
     return {

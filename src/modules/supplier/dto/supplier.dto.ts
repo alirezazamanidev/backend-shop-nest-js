@@ -1,10 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsIdentityCard, IsMobilePhone, Length } from 'class-validator';
-import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 export class SupplierSignupDto {
-  @ApiProperty()
-  categoryId: number;
   @ApiProperty()
   @Length(3, 50)
   store_name: string;

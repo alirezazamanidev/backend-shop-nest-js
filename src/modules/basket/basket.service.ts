@@ -121,28 +121,154 @@ export class BasketService {
           },
         },
       });
-      if(!UserBasket) throw new BadRequestException('شما نمی تواند از کد تخفیف مورد نظر در سبد خریدتان استفاده کنید!');
-    }else if(!discount.supplierId){
-      const generalDiscount=await this.basketRepository.findOne({
-        relations:{
-          discount:true,
+      if (!UserBasket)
+        throw new BadRequestException(
+          'شما نمی تواند از کد تخفیف مورد نظر در سبد خریدتان استفاده کنید!',
+        );
+    } else if (!discount.supplierId) {
+      const generalDiscount = await this.basketRepository.findOne({
+        relations: {
+          discount: true,
         },
-        where:{
+        where: {
           userId,
-          discount:{
-            id:Not(IsNull()),
-            supplierId:IsNull()
+          discount: {
+            id: Not(IsNull()),
+            supplierId: IsNull(),
+          },
+        },
+      });
+      if (generalDiscount)
+        throw new BadRequestException('کد تخفیف قبلا استفاده کرده اید!');
+    }
+    await this.basketRepository.insert({
+      discountId: discount.id,
+      userId,
+    });
+    return {
+      message: 'You added dicouunt code suuccessfully',
+    };
+  }
+  async removeDiscount(discountDto: DiscountBasketDto) {
+    const { code } = discountDto;
+    const { id: userId } = this.request.user;
+    const discount = await this.discountService.getOnebyCode(code);
+    const basketDiscount = await this.basketRepository.findOne({
+      where: {
+        discountId: discount.id,
+      },
+    });
+    if (!basketDiscount)
+      throw new BadRequestException('Not found discount in basket');
+
+    await this.basketRepository.delete({ discountId: discount.id, userId });
+    return {
+      message: 'You deleted discount code successfully',
+    };
+  }
+  async getBasket() {
+    const { id: userId } = this.request.user;
+    const basketItems = await this.basketRepository.find({
+      relations: {
+        discount: true,
+        product: {
+          supplier: true,
+        },
+      },
+      where: {
+        userId,
+      },
+    });
+
+    const products = basketItems.filter((item) => item.productId);
+    const supplierDiscounts = basketItems.filter(
+      (item) => item?.discount?.supplierId,
+    );
+    const generalDiscounts = basketItems.find(
+      (item) => item?.discount?.id && !item.discount.supplierId,
+    );
+    let total_amount = 0;
+    let payment_amount = 0;
+
+    let tottal_dicount_amount = 0;
+    let productList = [];
+    for (const item of products) {
+      let discount_amount = 0;
+      let discount_code: string = null;
+      const { product, count } = item;
+      total_amount += product.price * count;
+      const supplierId = product.supplierId;
+      let productPrice = product.price;
+      if (product.is_Active_discount && product.discount > 0) {
+        discount_amount += productPrice * (product.discount / 100);
+        productPrice = productPrice - productPrice * (product.discount / 100);
+        console.log(discount_amount);
+
+      }
+      const discountItem = supplierDiscounts.find(
+        ({ discount }) => discount.supplierId === supplierId,
+      );
+      if (discountItem) {
+        const {
+          discount: { active, amount, percent, limit, usage, code },
+        } = discountItem;
+        if (active) {
+          if (!limit || (limit && limit > usage)) {
+            discount_code = code;
+            if (percent && percent > 0) {
+              discount_amount += productPrice * (percent / 100);
+              productPrice = productPrice - productPrice * (percent / 100);
+            } else if (amount && amount > 0) {
+              discount_amount += amount;
+              productPrice = amount > productPrice ? 0 : productPrice - amount;
+            }
           }
         }
-      })
-      if(generalDiscount) throw new BadRequestException('کد تخفیف قبلا استفاده کرده اید!')
+      }
+      payment_amount += productPrice;
+      tottal_dicount_amount += discount_amount;
+      productList.push({
+        ...product,
+        total_amount: product.price * count,
+        discount_amount,
+        payment_amount: product.price * count - discount_amount,
+        discount_code,
+      });
     }
-  await this.basketRepository.insert({
-    discountId:discount.id,
-    userId
-  });
-  return {
-    message:'You added dicouunt code suuccessfully'
-  }
+
+    let generalDiscountDetail = {};
+    if (generalDiscounts?.discount?.active) {
+      const { discount } = generalDiscounts;
+      if (discount?.limit && discount.limit > discount.usage) {
+        let discount_amount = 0;
+        if (discount.percent > 0) {
+
+          discount_amount = payment_amount * (discount.percent / 100);
+          console.log(payment_amount);
+
+        } else if (discount.amount > 0) {
+          discount_amount = discount.amount;
+        }
+        payment_amount =
+          discount_amount > payment_amount
+            ? 0
+            : payment_amount - discount_amount;
+        tottal_dicount_amount += discount_amount;
+        generalDiscountDetail = {
+          code: discount.code,
+          percent: discount.percent,
+          amount: discount.amount,
+          discount_amount,
+        };
+      }
+    }
+
+    return {
+      total_amount,
+      payment_amount,
+      tottal_dicount_amount,
+      productList,
+      generalDiscountDetail,
+    };
   }
 }

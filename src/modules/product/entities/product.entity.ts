@@ -22,6 +22,8 @@ export class ProductEntity extends BaseEntity {
   price:number
   @Column({type:'numeric',default:0})
   discount:number;
+  @Column({default:false})
+  is_Active_discount:boolean
   @Column({type:'numeric',default:0})
   score:number
   @Column()

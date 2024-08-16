@@ -28,7 +28,5 @@ export class CategoryEntity extends BaseEntity {
   created_at:Date
   @UpdateDateColumn()
   updated_at:Date
-  @OneToMany(()=>SupplierEntity,supplier=>supplier.category)
-  suppliers:SupplierEntity[]
 
 }

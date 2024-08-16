@@ -19,6 +19,10 @@ export class CreateProductDto {
   @IsNumber()
   @IsPositive()
   price:number
+
+  @ApiPropertyOptional()
+  @IsNumber()
+  discount:number
   @ApiProperty()
   @IsNumber()
   categoryId:number

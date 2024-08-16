@@ -19,12 +19,7 @@ export class SupplierEntity extends BaseEntity {
   store_name:string
   @Column({unique:true,nullable:true})
   email:string
- @Column({nullable: true})
-  categoryId: number;
-  @ManyToOne(() => CategoryEntity, (category) => category.suppliers, {
-    onDelete: "SET NULL",
-  })
-  category: CategoryEntity;
+
   @Column({nullable:true})
   city:string
   @Column({nullable:true})

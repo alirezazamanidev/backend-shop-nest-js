@@ -39,14 +39,14 @@ export class SupplierService {
   ) {}
 
   async sginup(signupDto: SupplierSignupDto) {
-    const { categoryId, city, manager_fullname, phone, store_name } = signupDto;
+    const {city, manager_fullname, phone, store_name } = signupDto;
     const supplier = await this.supplierRepository.findOneBy({ phone });
     if (supplier) throw new ConflictException(ConflictMessage.Supplier);
-    await this.categoryService.findOneById(categoryId);
+   
     let account = this.supplierRepository.create({
       manager_fullname,
       phone,
-      categoryId,
+
       city,
       store_name,
     });
