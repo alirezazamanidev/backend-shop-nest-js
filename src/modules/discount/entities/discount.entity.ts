@@ -16,8 +16,8 @@ export class DiscountEntity extends BaseEntity {
   @Column({ nullable: true })
   limit: number;
   @Column({ nullable: true, default: 0 })
-  usage: 0;
-  @Column()
+  usage: number;
+  @Column({nullable:true})
   supplierId: number;
   @Column({ default: true })
   active: boolean;
