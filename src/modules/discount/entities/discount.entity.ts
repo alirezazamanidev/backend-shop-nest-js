@@ -1,6 +1,7 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { EntityName } from 'src/common/enums/entityName.enum';
-import { Column, CreateDateColumn, Entity } from 'typeorm';
+import { UserBasketEntity } from 'src/modules/basket/entities/basket.entity';
+import { Column, CreateDateColumn, Entity, OneToMany } from 'typeorm';
 
 @Entity(EntityName.Discount)
 export class DiscountEntity extends BaseEntity {
@@ -22,4 +23,6 @@ export class DiscountEntity extends BaseEntity {
   active: boolean;
   @CreateDateColumn()
   created_at:Date
+  @OneToMany(()=>UserBasketEntity,basket=>basket.discount)
+  baskets:UserBasketEntity[]
 }

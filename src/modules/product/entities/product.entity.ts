@@ -1,8 +1,9 @@
 import { BaseEntity } from "src/common/entities/base.entity";
 import { EntityName } from "src/common/enums/entityName.enum";
+import { UserBasketEntity } from "src/modules/basket/entities/basket.entity";
 import { CategoryEntity } from "src/modules/category/entities/category.entity";
 import { SupplierEntity } from "src/modules/supplier/entities/supplier.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
 
 @Entity(EntityName.Product)
 export class ProductEntity extends BaseEntity {
@@ -38,5 +39,6 @@ export class ProductEntity extends BaseEntity {
 
   @UpdateDateColumn()
   updated_at:Date
-
+  @OneToMany(()=>UserBasketEntity,basket=>basket.product)
+  baskets:UserBasketEntity[]
 }

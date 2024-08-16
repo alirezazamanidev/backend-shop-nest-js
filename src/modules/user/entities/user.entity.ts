@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   UpdateDateColumn,
 } from 'typeorm';
 import { OtpEntity } from './otp.entity';
+import { UserBasketEntity } from 'src/modules/basket/entities/basket.entity';
 
 @Entity(EntityName.User)
 export class UserEntity extends BaseEntity {
@@ -29,4 +31,6 @@ export class UserEntity extends BaseEntity {
   @OneToOne(() => OtpEntity, (otp) => otp.user, { onDelete: 'CASCADE' })
   @JoinColumn({name:'otpId'})
   otp: OtpEntity;
+  @OneToMany(()=>UserBasketEntity,basket=>basket.user)
+  basket:UserBasketEntity[]
 }

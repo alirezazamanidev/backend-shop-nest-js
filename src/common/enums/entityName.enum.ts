@@ -7,5 +7,6 @@ export enum EntityName {
   Supplier='supplier',
   SupplierOtp='supplier_otp',
   Product='product',
-  Discount='discount'
+  Discount='discount',
+  UserBasket='user_basket'
 }
