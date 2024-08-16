@@ -5,6 +5,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, One
 import { SupplierOtpEntity } from "./otp.entity";
 import { SupplierStatus } from "../enum/status.enum";
 import { ProductEntity } from "src/modules/product/entities/product.entity";
+import { OrderItemEntity } from "src/modules/order/entities/order-items.entity";
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity extends BaseEntity {
@@ -37,4 +38,7 @@ export class SupplierEntity extends BaseEntity {
   updated_at:Date
   @OneToMany(()=>ProductEntity,product=>product.supplier)
   products:ProductEntity[]
+  @OneToMany(()=>OrderItemEntity,order=>order.supplier)
+
+  orders:OrderItemEntity[]
 }

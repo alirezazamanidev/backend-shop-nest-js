@@ -2,6 +2,7 @@ import { BaseEntity } from "src/common/entities/base.entity";
 import { EntityName } from "src/common/enums/entityName.enum";
 import { UserBasketEntity } from "src/modules/basket/entities/basket.entity";
 import { CategoryEntity } from "src/modules/category/entities/category.entity";
+import { OrderItemEntity } from "src/modules/order/entities/order-items.entity";
 import { SupplierEntity } from "src/modules/supplier/entities/supplier.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
 
@@ -43,4 +44,7 @@ export class ProductEntity extends BaseEntity {
   updated_at:Date
   @OneToMany(()=>UserBasketEntity,basket=>basket.product)
   baskets:UserBasketEntity[]
+  @OneToMany(()=>OrderItemEntity,order=>order.product)
+  orders:OrderItemEntity[]
+
 }

@@ -10,6 +10,8 @@ import { SupplierModule } from './modules/supplier/supplier.module';
 import { ProductModule } from './modules/product/product.module';
 import { DiscountModule } from './modules/discount/discount.module';
 import { BasketModule } from './modules/basket/basket.module';
+import { OrderModule } from './modules/order/order.module';
+import { PaymentModule } from './modules/payment/payment.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { BasketModule } from './modules/basket/basket.module';
     ProductModule,
     DiscountModule,
     BasketModule,
+    OrderModule,
+    PaymentModule,
 
   ],
   providers:[TypeOrmDbConfig]
