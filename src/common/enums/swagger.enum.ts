@@ -4,7 +4,8 @@ export enum SwaggerTags {
   AcminCategory='Category(AdminPanel)',
   Product='Product',
   UserBasket='UserBasket',
-  DisCount='Discount'
+  DisCount='Discount',
+  Payment='Payment'
 }
 
 export enum ContentType {

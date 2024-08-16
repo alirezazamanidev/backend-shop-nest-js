@@ -12,6 +12,7 @@ import { DiscountModule } from './modules/discount/discount.module';
 import { BasketModule } from './modules/basket/basket.module';
 import { OrderModule } from './modules/order/order.module';
 import { PaymentModule } from './modules/payment/payment.module';
+import { HttpApiModule } from './modules/http/http.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { PaymentModule } from './modules/payment/payment.module';
     BasketModule,
     OrderModule,
     PaymentModule,
+    HttpApiModule,
 
   ],
   providers:[TypeOrmDbConfig]

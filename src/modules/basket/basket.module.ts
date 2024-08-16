@@ -13,5 +13,6 @@ import { DiscountModule } from '../discount/discount.module';
 
   controllers: [BasketController],
   providers: [BasketService],
+  exports:[BasketService]
 })
 export class BasketModule {}

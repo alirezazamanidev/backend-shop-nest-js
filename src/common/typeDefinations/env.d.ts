@@ -16,6 +16,11 @@ namespace NodeJS {
     S3_ENDPOINT: string;
     // Jwt Secret key
     COOKIE_SECRET_KEY: string;
-    JWT_SECRET_KEY:string
+    JWT_SECRET_KEY: string;
+    // zaripal
+    ZARINPAL_VERIFY_URL: string;
+    ZARINPAL_REQUEST_URL: string;
+    ZARINPAL_GATEWAY_URL: string;
+    ZARINPAL_MERCHANT_ID: string;
   }
 }
