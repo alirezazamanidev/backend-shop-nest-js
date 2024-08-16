@@ -46,6 +46,9 @@ export class DiscountService {
       message: PublicMessage.Insert,
     };
   }
+  async findAll(){
+    return await this.discountRepository.find({});
+  }
 
   async checkExistCode(code: string) {
     const discount = await this.discountRepository.findOneBy({ code });

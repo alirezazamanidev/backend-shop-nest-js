@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { DiscountService } from './discount.service';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ContentType, SwaggerTags } from 'src/common/enums/swagger.enum';
@@ -14,5 +14,11 @@ export class DiscountController {
   @ApiConsumes(ContentType.UrlEncoded,ContentType.Json)
   create(@Body() discountDto:CreateDiscountDto){
     return this.discountService.create(discountDto)
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('list')
+  findAll(){
+    return this.discountService.findAll()
   }
 }
