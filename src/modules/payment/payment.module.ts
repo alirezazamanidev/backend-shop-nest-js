@@ -9,9 +9,10 @@ import { AuthModule } from '../auth/auth.module';
 import { BasketModule } from '../basket/basket.module';
 import { ProductModule } from '../product/product.module';
 import { DiscountModule } from '../discount/discount.module';
+import { OrderModule } from '../order/order.module';
 
 @Module({
-  imports:[AuthModule,BasketModule,ProductModule,DiscountModule,TypeOrmModule.forFeature([PaymentEntity])],
+  imports:[AuthModule,BasketModule,ProductModule,DiscountModule,TypeOrmModule.forFeature([PaymentEntity]),OrderModule],
   controllers: [PaymentController],
   providers: [PaymentService],
 })

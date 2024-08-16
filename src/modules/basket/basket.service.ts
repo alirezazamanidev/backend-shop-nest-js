@@ -202,7 +202,6 @@ export class BasketService {
       if (product.is_Active_discount && product.discount > 0) {
         discount_amount += productPrice * (product.discount / 100);
         productPrice = productPrice - productPrice * (product.discount / 100);
-        console.log(discount_amount);
 
       }
       const discountItem = supplierDiscounts.find(
@@ -228,11 +227,18 @@ export class BasketService {
       payment_amount += productPrice;
       tottal_dicount_amount += discount_amount;
       productList.push({
-        ...product,
-        total_amount: product.price * count,
+        productId: product.id,
+        title:product.title,
+        description:product.description,
+        count,
+        image: product.photo,
+        price: product.price,
+        total_amount:product.price*count,
         discount_amount,
         payment_amount: product.price * count - discount_amount,
+
         discount_code,
+        supplierId:product.supplierId
       });
     }
 
@@ -244,8 +250,6 @@ export class BasketService {
         if (discount.percent > 0) {
 
           discount_amount = payment_amount * (discount.percent / 100);
-          console.log(payment_amount);
-
         } else if (discount.amount > 0) {
           discount_amount = discount.amount;
         }
@@ -266,7 +270,7 @@ export class BasketService {
     return {
       total_amount,
       payment_amount,
-      tottal_dicount_amount,
+      total_discount_amount:tottal_dicount_amount,
       productList,
       generalDiscountDetail,
     };
