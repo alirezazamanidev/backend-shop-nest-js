@@ -2,12 +2,13 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DiscountEntity } from './entities/discount.entity';
 import { DeepPartial, Repository } from 'typeorm';
 import { CreateDiscountDto } from './dto/discount.dto';
-import { ConflictMessage, PublicMessage } from 'src/common/enums/message.enum';
+import { ConflictMessage, NotFoundMessage, PublicMessage } from 'src/common/enums/message.enum';
 
 @Injectable()
 export class DiscountService {
@@ -48,6 +49,13 @@ export class DiscountService {
   }
   async findAll(){
     return await this.discountRepository.find({});
+  }
+
+  async getOnebyCode(code:string){
+    const discount=await this.discountRepository.findOne({where:{code}});
+    if(!discount) throw new NotFoundException(NotFoundMessage.Discount)
+    return discount
+
   }
 
   async checkExistCode(code: string) {

@@ -8,7 +8,7 @@ import { Column, Entity, ManyToOne } from "typeorm";
 @Entity(EntityName.UserBasket)
 export class UserBasketEntity extends BaseEntity {
 
-  @Column()
+  @Column({nullable:true})
   productId:number
   @Column()
   userId:number

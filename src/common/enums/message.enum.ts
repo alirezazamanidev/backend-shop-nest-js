@@ -19,7 +19,8 @@ export enum NotFoundMessage {
   User = 'کاربری یافت نشد!',
   Supplier='اکانت فروشنده شما یافت نشد!',
   Product='کالایی یافت نشد!',
-  Basket='محصول در سبد خرید یافت نشد!'
+  Basket='محصول در سبد خرید یافت نشد!',
+  Discount='کد تخفیف یافت نشد!'
 }
 export enum AuthMessage {
   OtpCodeNotExpired = 'کد تایید هنوز منقضی نشده است!',

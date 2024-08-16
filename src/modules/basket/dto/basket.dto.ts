@@ -8,3 +8,7 @@ export class AddToBasketDTo {
   @IsNumber()
   productId:number
 }
+export class DiscountBasketDto {
+  @ApiProperty()
+  code:string
+}

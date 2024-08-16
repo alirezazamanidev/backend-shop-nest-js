@@ -3,7 +3,7 @@ import { BasketService } from './basket.service';
 import { Auth } from 'src/common/decorators/auth.decorator';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ContentType, SwaggerTags } from 'src/common/enums/swagger.enum';
-import { AddToBasketDTo } from './dto/basket.dto';
+import { AddToBasketDTo, DiscountBasketDto } from './dto/basket.dto';
 
 @ApiTags(SwaggerTags.UserBasket)
 @Auth()
@@ -24,5 +24,11 @@ export class BasketController {
   @ApiConsumes(ContentType.UrlEncoded,ContentType.Json)
   removeFromBasket(@Param('productId',ParseIntPipe) productId:number){
     return this.basketService.removeFromBasket(productId)
+  }
+  @HttpCode(HttpStatus.OK)
+  @Post('discount')
+  @ApiConsumes(ContentType.UrlEncoded,ContentType.Json)
+  addDiscount(@Body() DiscountBasketDto:DiscountBasketDto){
+    return this.basketService.addDiscount(DiscountBasketDto)
   }
 }
