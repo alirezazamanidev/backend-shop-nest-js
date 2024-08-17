@@ -7,6 +7,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('/api');
+
+  // validation config
   // swagger config
   SwaggerConfig(app);
   const {PORT}=process.env

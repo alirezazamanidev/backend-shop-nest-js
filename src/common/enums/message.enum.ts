@@ -17,9 +17,11 @@ export enum PublicMessage {
 export enum NotFoundMessage {
   Category = 'دسته ای یافت نشد!',
   User = 'کاربری یافت نشد!',
+  Payment='پرداخت یافت نشد! ',
   Supplier='اکانت فروشنده شما یافت نشد!',
   Product='کالایی یافت نشد!',
   Basket='محصول در سبد خرید یافت نشد!',
+  Order='سقارش یافت نشد!',
   Discount='کد تخفیف یافت نشد!'
 }
 export enum AuthMessage {

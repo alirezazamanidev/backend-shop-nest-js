@@ -4,7 +4,8 @@ import { UserBasketEntity } from "src/modules/basket/entities/basket.entity";
 import { CategoryEntity } from "src/modules/category/entities/category.entity";
 import { OrderItemEntity } from "src/modules/order/entities/order-items.entity";
 import { SupplierEntity } from "src/modules/supplier/entities/supplier.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, UpdateDateColumn } from "typeorm";
+import { ProductPhotoEntity } from "./product-photo.entity";
 
 @Entity(EntityName.Product)
 export class ProductEntity extends BaseEntity {
@@ -15,10 +16,8 @@ export class ProductEntity extends BaseEntity {
   slug:string
   @Column({type:'text'})
   description:string
-  @Column()
-  photo:string
-  @Column()
-  photoKey:string
+  @Column({nullable:true})
+  photoId:number
   @Column({type:'numeric'})
   price:number
   @Column({type:'numeric',default:0})
@@ -37,6 +36,9 @@ export class ProductEntity extends BaseEntity {
   @ManyToOne(()=>CategoryEntity,{onDelete:'SET NULL'})
   @JoinColumn({name:'categoryId'})
   category:CategoryEntity
+  @OneToOne(()=>ProductPhotoEntity,photo=>photo.product,{onDelete:'CASCADE'})
+  @JoinColumn()
+  photo:ProductPhotoEntity
   @CreateDateColumn()
   created_at:Date
 

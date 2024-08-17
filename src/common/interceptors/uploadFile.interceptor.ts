@@ -6,5 +6,8 @@ export function UploadFileS3(filedName:string){
 
     return class UploadUtility extends FileInterceptor(filedName,{
         storage:memoryStorage()
-    }){}
+    }){
+
+        
+    }
 }

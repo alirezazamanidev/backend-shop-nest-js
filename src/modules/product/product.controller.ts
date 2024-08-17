@@ -14,6 +14,7 @@ import {
   FileTypeValidator,
   MaxFileSizeValidator,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -58,4 +59,5 @@ export class ProductController {
   filterProducts(@Query() PaginationDto:PaginationDto,@Query() FilterProductDTo:FilterProductDTo) {
     return this.productService.filterProducts(PaginationDto,FilterProductDTo)
   }
+  
 }

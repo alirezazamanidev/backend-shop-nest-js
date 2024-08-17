@@ -1,4 +1,4 @@
-import { BadGatewayException, Inject, Injectable, Scope } from '@nestjs/common';
+import { BadGatewayException, Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderEntity } from './entities/order.entity';
 import { Repository, DataSource, DeepPartial } from 'typeorm';
@@ -8,6 +8,7 @@ import { Request } from 'express';
 import { OrderItemStatus, OrderStatus } from './enums/status.enum';
 import { OrderItemEntity } from './entities/order-items.entity';
 import { PaymentDto } from '../payment/dto/payment.dto';
+import { NotFoundMessage } from 'src/common/enums/message.enum';
 
 @Injectable({scope:Scope.REQUEST})
 export class OrderService {
@@ -15,6 +16,8 @@ export class OrderService {
 
     @Inject(REQUEST) private request:Request,
     private dataSource: DataSource,
+    @InjectRepository(OrderEntity)
+    private orderRepository: Repository<OrderEntity>,
   ) {}
 
   async create(basket: BasketType,PaymentDto:PaymentDto) {
@@ -57,5 +60,14 @@ export class OrderService {
       throw error;
     }
 
+  }
+
+  async findOneById(id:number){
+    const order=await this.orderRepository.findOneBy({id});
+    if(!order) throw new NotFoundException(NotFoundMessage.Order);
+    return order
+  }
+  async save(order:OrderEntity){
+   return await this.orderRepository.save(order); 
   }
 }

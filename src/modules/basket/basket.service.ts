@@ -179,14 +179,18 @@ export class BasketService {
         userId,
       },
     });
+  
 
     const products = basketItems.filter((item) => item.productId);
+    
     const supplierDiscounts = basketItems.filter(
       (item) => item?.discount?.supplierId,
-    );
-    const generalDiscounts = basketItems.find(
+      );
+      
+      const generalDiscounts = basketItems.find(
       (item) => item?.discount?.id && !item.discount.supplierId,
     );
+    
     let total_amount = 0;
     let payment_amount = 0;
 
@@ -197,8 +201,11 @@ export class BasketService {
       let discount_code: string = null;
       const { product, count } = item;
       total_amount += product.price * count;
+      
+      
       const supplierId = product.supplierId;
       let productPrice = product.price;
+      
       if (product.is_Active_discount && product.discount > 0) {
         discount_amount += productPrice * (product.discount / 100);
         productPrice = productPrice - productPrice * (product.discount / 100);
@@ -224,7 +231,8 @@ export class BasketService {
           }
         }
       }
-      payment_amount += productPrice;
+      payment_amount += parseInt(productPrice.toString());
+      
       tottal_dicount_amount += discount_amount;
       productList.push({
         productId: product.id,

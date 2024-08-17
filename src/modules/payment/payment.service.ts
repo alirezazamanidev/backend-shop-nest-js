@@ -1,4 +1,10 @@
-import { ConflictException, Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  Scope,
+} from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { BasketService } from '../basket/basket.service';
@@ -8,6 +14,8 @@ import { OrderService } from '../order/order.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaymentEntity } from './entities/payment.entity';
 import { Repository } from 'typeorm';
+import { NotFoundMessage } from 'src/common/enums/message.enum';
+import { OrderStatus } from '../order/enums/status.enum';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PaymentService {
@@ -33,22 +41,22 @@ export class PaymentService {
       status: basket.payment_amount === 0,
       invoice_number: new Date().getTime().toString(),
     });
-    if(!payment.status){
-      const {authority,code,gateWayUrl}= await this.zarinpalService.sendRequest({
-        amount: basket.payment_amount,
-        description:'payment',
-      });
-      payment.authority=authority;
+    if (!payment.status) {
+      const { authority, code, gateWayUrl } =
+        await this.zarinpalService.sendRequest({
+          amount: basket.payment_amount,
+          description: 'payment',
+        });
+      payment.authority = authority;
       await this.paymentReposiotry.save(payment);
       return {
         gateWayUrl,
-        code
-      }
+        code,
+      };
     }
     return {
-      message:'پرداخت با موفقیت انجام شد'
-    }
-
+      message: 'پرداخت با موفقیت انجام شد',
+    };
   }
   async create(paymentDto: PaymentDataDto) {
     const { amount, invoice_number, orderId, status, userId } = paymentDto;
@@ -62,11 +70,23 @@ export class PaymentService {
     return await this.paymentReposiotry.save(payment);
   }
 
-  async verify(authority:string,status:string){
-    const payment=await this.paymentReposiotry.findOneBy({authority});
-    if (!payment) throw new NotFoundException();
-    if (payment.status) throw new ConflictException("already verified");
+  async verify(authority: string, status: string) {
+    const payment = await this.paymentReposiotry.findOneBy({ authority });
+    if (!payment) throw new NotFoundException(NotFoundMessage.Payment);
+    if (payment.status) throw new ConflictException('already verified');
+    const order = await this.orderService.findOneById(payment.orderId);
+    if (status === 'OK') {
+      order.status = OrderStatus.Paid;
+      await this.orderService.save(order);
+      payment.status = true;
+    } else {
+      order.status = OrderStatus.Canceled;
+      await this.orderService.save(order);
 
+      return 'http://localhost:3000/payment?status=failed';
+    }
+    await this.paymentReposiotry.save(payment);
+    return 'http://localhost:3000/payment?status=success';
 
   }
 }
