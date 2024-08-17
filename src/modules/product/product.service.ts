@@ -58,7 +58,7 @@ export class ProductService {
       supplierId,
       price,
     };
-    objectProduct['is_Active_discount'] = discount>0 ? true : false;
+    objectProduct['is_Active_discount'] = discount > 0 ? true : false;
     objectProduct['slug'] = slug
       ? slug
       : slugify(title, { replacement: '_', lower: true });
@@ -76,7 +76,7 @@ export class ProductService {
         photo,
         'product/images',
       );
-    // save photo product 
+      // save photo product
       let newPhoto = await this.productPhotoRepository.create({
         fieldname: photo.fieldname,
         size: photo.size,
@@ -85,8 +85,8 @@ export class ProductService {
         key: Key,
         path: Location,
       });
-      newPhoto=await this.productPhotoRepository.save(newPhoto);
-      newProduct.photoId=newPhoto.id;
+      newPhoto = await this.productPhotoRepository.save(newPhoto);
+      newProduct.photoId = newPhoto.id;
       // Update product with photo details
       await this.productRepository.save(newProduct);
 
@@ -122,8 +122,23 @@ export class ProductService {
     const [products, count] = await this.productRepository
       .createQueryBuilder(EntityName.Product)
       .leftJoinAndSelect('product.category', 'category')
-
+      .leftJoinAndSelect('product.photo', 'photo')
       .where(where, parameters)
+      .select([
+        'product.id',
+        'product.title',
+        'product.title',
+        'product.description',
+        'product.photo',
+        'photo.id',
+        'photo.size',
+        'photo.originalname',
+        'photo.mimetype',
+        'photo.path',
+        'category.id',
+        'category.name',
+        'category.slug'
+      ])
       .take(page)
       .skip(skip)
       .getManyAndCount();
