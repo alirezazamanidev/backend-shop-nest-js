@@ -6,6 +6,7 @@ import { OrderItemEntity } from "src/modules/order/entities/order-items.entity";
 import { SupplierEntity } from "src/modules/supplier/entities/supplier.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, UpdateDateColumn } from "typeorm";
 import { ProductPhotoEntity } from "./product-photo.entity";
+import { ProductCommentEntity } from "./comment.entity";
 
 @Entity(EntityName.Product)
 export class ProductEntity extends BaseEntity {
@@ -48,5 +49,7 @@ export class ProductEntity extends BaseEntity {
   baskets:UserBasketEntity[]
   @OneToMany(()=>OrderItemEntity,order=>order.product)
   orders:OrderItemEntity[]
+  @OneToMany(()=>ProductCommentEntity,comment=>comment.product)
+  comments:ProductCommentEntity[]
 
 }

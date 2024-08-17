@@ -13,6 +13,7 @@ import { OtpEntity } from './otp.entity';
 import { UserBasketEntity } from 'src/modules/basket/entities/basket.entity';
 import { OrderEntity } from 'src/modules/order/entities/order.entity';
 import { PaymentEntity } from 'src/modules/payment/entities/payment.entity';
+import { ProductCommentEntity } from 'src/modules/product/entities/comment.entity';
 
 @Entity(EntityName.User)
 export class UserEntity extends BaseEntity {
@@ -39,4 +40,7 @@ export class UserEntity extends BaseEntity {
   orders: OrderEntity[];
   @OneToMany(() => PaymentEntity, (payment) => payment.user)
   payments: PaymentEntity[];
+  @OneToMany(() => ProductCommentEntity, (comment) => comment.user)
+  productComments:ProductCommentEntity[]
+  
 }
